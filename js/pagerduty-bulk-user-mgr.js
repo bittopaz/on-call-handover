@@ -38,8 +38,18 @@ const buttonList = Object.keys(navMap);
 
 const handleIncidentsClick = async () => {
   const pd = initPDJS();
-  const result = await pd.get('/incidents');
-  console.log(result);
+  const { data } = await pd.get('/incidents');
+  const list = data.incidents
+    .map(incident => ({
+      summary: incident.summary,
+      url: incident.html_url
+    }));
+
+  document.querySelector("#incidents-result").innerHTML = `
+    <ul>
+      ${list.map(item => `<li>${item.summary} - <a href="${item.url}">${item.url}</a></li>`)}
+    </ul>
+  `;
 }
 
 // setting the onclick property for each of the nav buttons
