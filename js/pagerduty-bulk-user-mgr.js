@@ -44,13 +44,14 @@ const handleIncidentsClick = async () => {
 
   let uid = "" 
   pd.get("/users/me", {})
-      .then(({ data }) => {
-          console.log("data: ", JSON.stringify(data))
-          uid = data.user.id
+      .then(({ res }) => {
+          console.log("user info: ", JSON.stringify(res))
+          uid = res.user.id
       })
       .catch(console.error);
 
   console.log(">>> uid: ", uid)
+  console.log(">>> data: ", JSON.stringify(data))
 
   let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.incident.id, uid))
 
