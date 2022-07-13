@@ -41,16 +41,13 @@ const handleIncidentsClick = async () => {
 
   // Get my user
   const res = await pd.get("/users/me");
+  let uid = res.user.id
+  console.log(">>> uid: ", uid)
 
   // Get all incidents
   const { data } = await pd.all(
     "/incidents?since=2022-07-10T00:00:00&timezone=UTC&limit=100"
   );
-
-  console.log(">>> res: ", JSON.stringify(res))
-
-  let uid = res.user.id
-  console.log(">>> uid: ", uid)
   console.log(">>> data: ", JSON.stringify(data))
 
   let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.id, uid))
