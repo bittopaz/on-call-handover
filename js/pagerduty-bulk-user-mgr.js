@@ -71,18 +71,16 @@ const handleIncidentsClick = async () => {
     }
   }, []);
 
-  const logEntries = [];
+  const logEntriesList = [];
 
   for (let item of chunkedIncidents) {
     const data = await Promise.all(
-      item.map((incident) =>
-        pd
-          .get(`incidents/${incident.id}/log_entries`)
-          .then((res) => res.log_entries)
-      )
+      item.map((incident) => pd.get(`incidents/${incident.id}/log_entries`))
     );
-    logEntries.push(...data);
+    logEntriesList.push(...data);
   }
+
+  const logEntries = logEntriesList.map((item) => item.log_entries);
 
   let matchedIncidents = incidents.filter((item, i) =>
     logEntries[i].some(
