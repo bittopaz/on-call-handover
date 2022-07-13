@@ -42,14 +42,15 @@ const handleIncidentsClick = async () => {
   // Get my user
   // const res = await pd.get("/users/me");
   // let uid = res.user.id
-  // console.log(">>> uid: ", uid)
 
   let uid;
-  await pd.get("/users/me", {})
+  pd.get("/users/me", {})
       .then(({ data }) => {
+        console.log("data: ", data)
         uid = data.user.id
       })
       .catch(console.error);
+  console.log(">>> uid: ", uid)
 
   // Get all incidents
   const { data } = await pd.all(
