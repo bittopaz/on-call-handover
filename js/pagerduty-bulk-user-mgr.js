@@ -80,7 +80,7 @@ const handleIncidentsClick = async () => {
     logEntriesList.push(...data);
   }
 
-  const logEntries = logEntriesList.map((item) => item.log_entries);
+  const logEntries = logEntriesList.map((item) => item.data.log_entries);
 
   let matchedIncidents = incidents.filter((item, i) =>
     logEntries[i].some(
