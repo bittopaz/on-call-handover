@@ -63,7 +63,7 @@ const handleIncidentsClick = async () => {
   );
 
   const chunkedIncidents = incidents.reduce((prev, curr, currIndex) => {
-    if (currIndex % 25 === 0) {
+    if (currIndex % 50 === 0) {
       return [...prev, [curr]];
     } else {
       prev[prev.length - 1].push(curr);
