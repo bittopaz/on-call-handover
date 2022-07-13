@@ -36,6 +36,12 @@ const navigateFrom = function (buttonId) {
 };
 const buttonList = Object.keys(navMap);
 
+const handleIncidentsClick = async () => {
+  const pd = initPDJS();
+  const result = await pd.post('/incidents');
+  console.log(result);
+}
+
 // setting the onclick property for each of the nav buttons
 buttonList.map((buttonId) => {
   // adding click event for nav buttons
@@ -45,6 +51,8 @@ buttonList.map((buttonId) => {
       populateUsersResult();
     } else if (buttonId === "users-edit-button") {
       populateUsersEdit();
+    } else if (buttonId === "incidents-button") {
+      handleIncidentsClick();
     }
   };
   // todo: add keyevent
@@ -217,8 +225,8 @@ document.getElementById("csv-file-input").onchange = function () {
 
       $("#users-import-result").append(
         '<button type="button" id="users-import-submit" class="btn btn-primary">Add ' +
-          users.length +
-          " users</button>"
+        users.length +
+        " users</button>"
       );
       $("#users-import-submit").click(function () {
         addUsers(users);
@@ -340,11 +348,11 @@ function modifyUser(userId, field, value) {
     .catch(({ data }) => {
       alert(
         "Failed to edit " +
-          field +
-          ": " +
-          data.responseJSON.error.message +
-          "\n\n" +
-          data.responseJSON.error.errors.join("\n")
+        field +
+        ": " +
+        data.responseJSON.error.message +
+        "\n\n" +
+        data.responseJSON.error.errors.join("\n")
       );
       populateUsersEdit();
     });
