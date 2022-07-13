@@ -45,6 +45,7 @@ const handleIncidentsClick = async () => {
   const {currentUser} = await pd.get(
     "/users/me"
   );
+  console.log(">>> currentUser: ", JSON.stringify(currentUser))
   console.log(">>> uid: ", currentUser.user.id)
 
   let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.incident.id, currentUser.user.id))
