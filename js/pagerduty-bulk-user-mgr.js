@@ -38,7 +38,9 @@ const buttonList = Object.keys(navMap);
 
 const handleIncidentsClick = async () => {
   const pd = initPDJS();
-  const { data } = await pd.get("/incidents?limit=200&include[]=users");
+  const { data } = await pd.all(
+    "/incidents?since=2022-07-08T00:00:00&timezone=UTC"
+  );
   const list = data.incidents.map((incident) => ({
     title: incident.title,
     summary: incident.summary,
