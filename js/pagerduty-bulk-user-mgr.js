@@ -40,8 +40,8 @@ const handleIncidentsClick = async () => {
   const pd = initPDJS();
 
   // Get my user
-  // const res = await pd.get("/users/me");
-  // let uid = res.user.id
+  const res = await pd.get("/users/me");
+  let uid = res.user.id
 
   // let uid;
   // pd.get("/users/me", {})
@@ -52,7 +52,7 @@ const handleIncidentsClick = async () => {
   //     .catch(console.error);
   // console.log(">>> uid: ", uid)
 
-  let uid = localStorage.getItem("current_uid");
+  // let uid = localStorage.getItem("current_uid");
 
   // Get all incidents
   const { data } = await pd.all(
