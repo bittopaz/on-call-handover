@@ -54,20 +54,42 @@ const handleIncidentsClick = async () => {
 
   // Get all incidents
   const { data } = await pd.all(
-    "/incidents?since=2022-07-10T00:00:00&timezone=UTC&limit=100"
+    "/incidents?since=2022-07-11T00:00:00&timezone=UTC&limit=100"
   );
 
-  const incidents = data.reduce((prev, curr) => [...prev, ...curr.incidents], []);
+  const incidents = data
+    .reduce((prev, curr) => [...prev, ...curr.incidents], [])
+    .reduce((prev, curr, currIndex) => {
+      if (currIndex % 25 === 0) {
+        return [...prev, [curr]];
+      } else {
+        prev[prev.length - 1].push(curr);
+        return prev;
+      }
+    }, []);
+
+  const incidentsList = [];
+
+  for (let item of incidentsList) {
+    const data = await Promise.all(
+      item.map((incident) =>
+        pd
+          .get(`incidents/${incident.id}/log_entries`)
+          .then((res) => res.entries)
+      )
+    );
+    incidentsList.push(...data);
+  }
 
   console.log(">>> data: ", JSON.stringify(data));
 
   const logEntries = await Promise.all(
-    incidents.map((incident) =>
+    incidentsList.map((incident) =>
       pd.get(`incidents/${incident.id}/log_entries`).then((res) => res.entries)
     )
   );
 
-  let matchedIncidents = incidents.filter((item, i) =>
+  let matchedIncidents = incidentsList.filter((item, i) =>
     logEntries[i].some(
       (item) => item.type === "notify_log_entry" && item.user.id === my_uid
     )
