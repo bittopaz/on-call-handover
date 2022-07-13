@@ -56,15 +56,18 @@ const handleIncidentsClick = async () => {
   const { data } = await pd.all(
     "/incidents?since=2022-07-10T00:00:00&timezone=UTC&limit=100"
   );
+
+  const incidents = data.reduce((prev, curr) => [...prev, curr.incidents], []);
+
   console.log(">>> data: ", JSON.stringify(data));
 
   const logEntries = await Promise.all(
-    data.map((incident) =>
+    incidents.map((incident) =>
       pd.get(`incidents/${incident.id}/log_entries`).then((res) => res.entries)
     )
   );
 
-  let matchedIncidents = data.filter((item, i) =>
+  let matchedIncidents = incidents.filter((item, i) =>
     logEntries[i].some(
       (item) => item.type === "notify_log_entry" && item.user.id === my_uid
     )
