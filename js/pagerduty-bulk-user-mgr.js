@@ -41,7 +41,7 @@ const handleIncidentsClick = async () => {
 
   // Get my user
   const res = await pd.get("/users/me");
-  let uid = res.user.id
+  let uid = res.data.user.id
 
   // let uid;
   // pd.get("/users/me", {})
