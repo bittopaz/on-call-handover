@@ -37,15 +37,15 @@ const navigateFrom = function (buttonId) {
 const buttonList = Object.keys(navMap);
 
 const handleIncidentsClick = async () => {
-const pd = initPDJS();
-const { data } = await pd.all(
-  "/incidents?since=2022-07-08T00:00:00&timezone=UTC"
-);
+  const pd = initPDJS();
+  const { data } = await pd.all(
+    "/incidents?since=2022-07-08T00:00:00&timezone=UTC"
+  );
 
-const {currentUser} = await pd.get(
-  "/users/me"
-);
-console.log(">>> uid: ", currentUser.id)
+  const {currentUser} = await pd.get(
+    "/users/me"
+  );
+  console.log(">>> uid: ", currentUser.id)
 
   let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.incident.id, currentUser.id))
 
@@ -70,7 +70,7 @@ function reachedToMe(pd, incident_id, my_uid){
   console.log("reachedToMe, incident_id: ", incident_id, " my_uid: ", my_uid)
 
   // query log entry api
-  const { entries } = await pd.get("incidents/"+ incident_id + "/log_entries");  
+  const { entries } = pd.get("incidents/"+ incident_id + "/log_entries");  
   
   if  (entries.filter(item => item.type=="notify_log_entry" && item.user.id==my_uid).length != 0) {
     return true
