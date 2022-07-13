@@ -41,7 +41,7 @@ const handleIncidentsClick = async () => {
 
   // Get my user
   const res = await pd.get("/users/me");
-  let uid = res.data.user.id
+  let uid = res.data.user.id;
 
   // let uid;
   // pd.get("/users/me", {})
@@ -59,12 +59,12 @@ const handleIncidentsClick = async () => {
   console.log(">>> data: ", JSON.stringify(data));
 
   const logEntries = await Promise.all(
-    data.incidents.map((incident) =>
+    data.map((incident) =>
       pd.get(`incidents/${incident.id}/log_entries`).then((res) => res.entries)
     )
   );
 
-  let matchedIncidents = data.incidents.filter((item, i) =>
+  let matchedIncidents = data.filter((item, i) =>
     logEntries[i].some(
       (item) => item.type === "notify_log_entry" && item.user.id === my_uid
     )
@@ -158,9 +158,14 @@ const loadPage = function () {
     const pd = initPDJS();
     initLogoutButton();
 
+    (res) => {
+      const data = res.data;
+    };
+
+    ({ data }) => {};
+
     pd.get("/users/me", {})
       .then(({ data }) => {
-        localStorage.setItem("current_uid", data.user.id);
         document.getElementById("welcome").innerHTML = `
 			<div id="user-wrapper">
 				<div id="pic">
