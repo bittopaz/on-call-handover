@@ -57,20 +57,23 @@ const handleIncidentsClick = async () => {
     "/incidents?since=2022-07-11T00:00:00&timezone=UTC&limit=100"
   );
 
-  const incidents = data
-    .reduce((prev, curr) => [...prev, ...curr.incidents], [])
-    .reduce((prev, curr, currIndex) => {
-      if (currIndex % 25 === 0) {
-        return [...prev, [curr]];
-      } else {
-        prev[prev.length - 1].push(curr);
-        return prev;
-      }
-    }, []);
+  const incidents = data.reduce(
+    (prev, curr) => [...prev, ...curr.incidents],
+    []
+  );
 
-  const incidentsList = [];
+  const chunkedIncidents = incidents.reduce((prev, curr, currIndex) => {
+    if (currIndex % 25 === 0) {
+      return [...prev, [curr]];
+    } else {
+      prev[prev.length - 1].push(curr);
+      return prev;
+    }
+  }, []);
 
-  for (let item of incidentsList) {
+  const logEntries = [];
+
+  for (let item of chunkedIncidents) {
     const data = await Promise.all(
       item.map((incident) =>
         pd
@@ -78,18 +81,10 @@ const handleIncidentsClick = async () => {
           .then((res) => res.entries)
       )
     );
-    incidentsList.push(...data);
+    logEntries.push(...data);
   }
 
-  console.log(">>> data: ", JSON.stringify(data));
-
-  const logEntries = await Promise.all(
-    incidentsList.map((incident) =>
-      pd.get(`incidents/${incident.id}/log_entries`).then((res) => res.entries)
-    )
-  );
-
-  let matchedIncidents = incidentsList.filter((item, i) =>
+  let matchedIncidents = incidents.filter((item, i) =>
     logEntries[i].some(
       (item) => item.type === "notify_log_entry" && item.user.id === my_uid
     )
