@@ -39,18 +39,15 @@ const buttonList = Object.keys(navMap);
 const handleIncidentsClick = async () => {
   const pd = initPDJS();
   const { data } = await pd.all(
-    "/incidents?since=2022-07-08T00:00:00&timezone=UTC&limit=100"
+    "/incidents?since=2022-07-10T00:00:00&timezone=UTC&limit=100"
   );
 
-  let uid = "" 
-  pd.get("/users/me", {})
-      .then(({ res }) => {
-          console.log("user info: ", JSON.stringify(res))
-          uid = res.user.id
-      })
-      .catch(console.error);
+  const { res } = await pd.get("/users/me")
+  console.log(">>> res: ", JSON.stringify(res))
 
+  let uid = res.user.id
   console.log(">>> uid: ", uid)
+
   console.log(">>> data: ", JSON.stringify(data))
 
   let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.id, uid))
