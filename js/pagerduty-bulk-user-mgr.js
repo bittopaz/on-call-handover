@@ -78,7 +78,7 @@ const handleIncidentsClick = async () => {
       item.map((incident) =>
         pd
           .get(`incidents/${incident.id}/log_entries`)
-          .then((res) => res.data.entries)
+          .then((res) => res.log_entries)
       )
     );
     logEntries.push(...data);
