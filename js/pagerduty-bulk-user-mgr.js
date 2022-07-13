@@ -43,14 +43,16 @@ const handleIncidentsClick = async () => {
   // const res = await pd.get("/users/me");
   // let uid = res.user.id
 
-  let uid;
-  pd.get("/users/me", {})
-      .then(({ data }) => {
-        console.log("data: ", data)
-        uid = data.user.id
-      })
-      .catch(console.error);
-  console.log(">>> uid: ", uid)
+  // let uid;
+  // pd.get("/users/me", {})
+  //     .then(({ data }) => {
+  //       console.log("data: ", data)
+  //       uid = data.user.id
+  //     })
+  //     .catch(console.error);
+  // console.log(">>> uid: ", uid)
+
+  let uid = localStorage.getItem("current_uid");
 
   // Get all incidents
   const { data } = await pd.all(
@@ -146,6 +148,7 @@ const loadPage = function () {
 
     pd.get("/users/me", {})
       .then(({ data }) => {
+        localStorage.setItem("current_uid", data.user.id);
         document.getElementById("welcome").innerHTML = `
 			<div id="user-wrapper">
 				<div id="pic">
