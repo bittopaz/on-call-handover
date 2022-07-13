@@ -38,19 +38,21 @@ const buttonList = Object.keys(navMap);
 
 const handleIncidentsClick = async () => {
   const pd = initPDJS();
-  const { data } = await pd.get('/incidents');
-  const list = data.incidents
-    .map(incident => ({
-      summary: incident.summary,
-      url: incident.html_url
-    }));
+  const { data } = await pd.get("/incidents");
+  const list = data.incidents.map((incident) => ({
+    summary: incident.summary,
+    url: incident.html_url,
+  }));
 
   document.querySelector("#incidents-result").innerHTML = `
     <ul>
-      ${list.map(item => `<li>${item.summary} - <a href="${item.url}">${item.url}</a></li>`)}
+      ${list.map(
+        (item) =>
+          `<li>${item.title}(<a href="${item.url}">${item.url}</a>)</li>`
+      )}
     </ul>
   `;
-}
+};
 
 // setting the onclick property for each of the nav buttons
 buttonList.map((buttonId) => {
@@ -235,8 +237,8 @@ document.getElementById("csv-file-input").onchange = function () {
 
       $("#users-import-result").append(
         '<button type="button" id="users-import-submit" class="btn btn-primary">Add ' +
-        users.length +
-        " users</button>"
+          users.length +
+          " users</button>"
       );
       $("#users-import-submit").click(function () {
         addUsers(users);
@@ -358,11 +360,11 @@ function modifyUser(userId, field, value) {
     .catch(({ data }) => {
       alert(
         "Failed to edit " +
-        field +
-        ": " +
-        data.responseJSON.error.message +
-        "\n\n" +
-        data.responseJSON.error.errors.join("\n")
+          field +
+          ": " +
+          data.responseJSON.error.message +
+          "\n\n" +
+          data.responseJSON.error.errors.join("\n")
       );
       populateUsersEdit();
     });
