@@ -42,13 +42,17 @@ const handleIncidentsClick = async () => {
     "/incidents?since=2022-07-08T00:00:00&timezone=UTC&limit=100"
   );
 
-  const {currentUser} = await pd.get(
-    "/users/me"
-  );
-  console.log(">>> currentUser: ", JSON.stringify(currentUser))
-  console.log(">>> uid: ", currentUser.user.id)
+  let uid = "" 
+  pd.get("/users/me", {})
+      .then(({ data }) => {
+          console.log("data: ", JSON.stringify(data))
+          uid = data.user.id
+      })
+      .catch(console.error);
 
-  let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.incident.id, currentUser.user.id))
+  console.log(">>> uid: ", uid)
+
+  let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.incident.id, uid))
 
   const list = matchedIncidents.map((incident) => ({
     id: incident.id,
