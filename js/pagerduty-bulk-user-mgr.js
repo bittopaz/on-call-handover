@@ -53,7 +53,7 @@ const handleIncidentsClick = async () => {
   console.log(">>> uid: ", uid)
   console.log(">>> data: ", JSON.stringify(data))
 
-  let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.incident.id, uid))
+  let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.id, uid))
 
   const list = matchedIncidents.map((incident) => ({
     id: incident.id,
