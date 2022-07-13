@@ -40,6 +40,7 @@ const handleIncidentsClick = async () => {
   const pd = initPDJS();
   const { data } = await pd.get("/incidents");
   const list = data.incidents.map((incident) => ({
+    title: incident.title,
     summary: incident.summary,
     url: incident.html_url,
   }));
