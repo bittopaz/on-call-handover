@@ -40,9 +40,16 @@ const handleIncidentsClick = async () => {
   const pd = initPDJS();
 
   // Get my user
-  const res = await pd.get("/users/me");
-  let uid = res.user.id
-  console.log(">>> uid: ", uid)
+  // const res = await pd.get("/users/me");
+  // let uid = res.user.id
+  // console.log(">>> uid: ", uid)
+
+  let uid;
+  await pd.get("/users/me", {})
+      .then(({ data }) => {
+        uid = data.user.id
+      })
+      .catch(console.error);
 
   // Get all incidents
   const { data } = await pd.all(
@@ -73,8 +80,8 @@ function reachedToMe(pd, incident_id, my_uid){
   console.log("reachedToMe, incident_id: ", incident_id, " my_uid: ", my_uid)
 
   // query log entry api
-  const { entries } = pd.get("incidents/"+ incident_id + "/log_entries");  
-  
+  const { entries } = pd.get("incidents/"+ incident_id + "/log_entries");
+
   if (entries.filter(item => item.type=="notify_log_entry" && item.user.id==my_uid).length != 0) {
     return true
   }
