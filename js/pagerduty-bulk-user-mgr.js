@@ -57,7 +57,7 @@ const handleIncidentsClick = async () => {
     "/incidents?since=2022-07-10T00:00:00&timezone=UTC&limit=100"
   );
 
-  const incidents = data.reduce((prev, curr) => [...prev, curr.incidents], []);
+  const incidents = data.reduce((prev, curr) => [...prev, ...curr.incidents], []);
 
   console.log(">>> data: ", JSON.stringify(data));
 
