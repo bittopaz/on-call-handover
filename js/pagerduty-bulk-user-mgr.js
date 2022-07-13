@@ -54,7 +54,7 @@ const handleIncidentsClick = async () => {
 
   // Get all incidents
   const { data } = await pd.all(
-    "/incidents?since=2022-07-11T00:00:00&timezone=UTC&limit=100"
+    "/incidents?since=2022-07-13T00:00:00&timezone=UTC&limit=100"
   );
 
   const incidents = data.reduce(
@@ -78,7 +78,7 @@ const handleIncidentsClick = async () => {
       item.map((incident) =>
         pd
           .get(`incidents/${incident.id}/log_entries`)
-          .then((res) => res.entries)
+          .then((res) => res.data.entries)
       )
     );
     logEntries.push(...data);
