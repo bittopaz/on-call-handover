@@ -84,7 +84,7 @@ const handleIncidentsClick = async () => {
 
   let matchedIncidents = incidents.filter((item, i) =>
     logEntries[i].some(
-      (item) => item.type === "notify_log_entry" && item.user.id === my_uid
+      (item) => item.type === "notify_log_entry" && item.user.id === uid
     )
   );
 
