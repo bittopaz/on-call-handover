@@ -96,30 +96,14 @@ const handleIncidentsClick = async () => {
   }));
 
   document.querySelector("#incidents-result").innerHTML = `
-    <ul>
+    <div>
       ${list.map(
         (item) =>
-          `<li>${item.title}(<a href="${item.url}">${item.url}</a>)</li>`
-      )}
-    </ul>
+          `<p>${item.title}(<a href="${item.url}">${item.url}</a>)</p>`
+      ).join('')}
+    </div>
   `;
 };
-
-function reachedToMe(pd, incident_id, my_uid) {
-  console.log("reachedToMe, incident_id: ", incident_id, " my_uid: ", my_uid);
-
-  // query log entry api
-  const { entries } = pd.get("incidents/" + incident_id + "/log_entries");
-
-  if (
-    entries.filter(
-      (item) => item.type == "notify_log_entry" && item.user.id == my_uid
-    ).length != 0
-  ) {
-    return true;
-  }
-  return false;
-}
 
 // setting the onclick property for each of the nav buttons
 buttonList.map((buttonId) => {
