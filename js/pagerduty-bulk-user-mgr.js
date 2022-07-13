@@ -38,7 +38,7 @@ const buttonList = Object.keys(navMap);
 
 const handleIncidentsClick = async () => {
   const pd = initPDJS();
-  const result = await pd.post('/incidents');
+  const result = await pd.get('/incidents');
   console.log(result);
 }
 
