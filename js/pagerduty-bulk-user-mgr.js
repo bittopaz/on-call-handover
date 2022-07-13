@@ -45,22 +45,30 @@ const handleIncidentsClick = async () => {
 
   // let uid;
   // pd.get("/users/me", {})
-  //     .then(({ data }) => {
-  //       console.log("data: ", data)
-  //       uid = data.user.id
-  //     })
-  //     .catch(console.error);
-  // console.log(">>> uid: ", uid)
-
-  // let uid = localStorage.getItem("current_uid");
+  //   .then(({ data }) => {
+  //     console.log("data: ", data);
+  //     uid = data.user.id;
+  //   })
+  //   .catch(console.error);
+  console.log(">>> uid: ", uid);
 
   // Get all incidents
   const { data } = await pd.all(
     "/incidents?since=2022-07-10T00:00:00&timezone=UTC&limit=100"
   );
-  console.log(">>> data: ", JSON.stringify(data))
+  console.log(">>> data: ", JSON.stringify(data));
 
-  let matchedIncidents = data.incidents.filter(item => reachedToMe(pd, item.id, uid))
+  const logEntries = await Promise.all(
+    data.incidents.map((incident) =>
+      pd.get(`incidents/${incident.id}/log_entries`).then((res) => res.entries)
+    )
+  );
+
+  let matchedIncidents = data.incidents.filter((item, i) =>
+    logEntries[i].some(
+      (item) => item.type === "notify_log_entry" && item.user.id === my_uid
+    )
+  );
 
   const list = matchedIncidents.map((incident) => ({
     id: incident.id,
@@ -79,16 +87,20 @@ const handleIncidentsClick = async () => {
   `;
 };
 
-function reachedToMe(pd, incident_id, my_uid){
-  console.log("reachedToMe, incident_id: ", incident_id, " my_uid: ", my_uid)
+function reachedToMe(pd, incident_id, my_uid) {
+  console.log("reachedToMe, incident_id: ", incident_id, " my_uid: ", my_uid);
 
   // query log entry api
-  const { entries } = pd.get("incidents/"+ incident_id + "/log_entries");
+  const { entries } = pd.get("incidents/" + incident_id + "/log_entries");
 
-  if (entries.filter(item => item.type=="notify_log_entry" && item.user.id==my_uid).length != 0) {
-    return true
+  if (
+    entries.filter(
+      (item) => item.type == "notify_log_entry" && item.user.id == my_uid
+    ).length != 0
+  ) {
+    return true;
   }
-  return false
+  return false;
 }
 
 // setting the onclick property for each of the nav buttons
